@@ -1,0 +1,20 @@
+
+server:
+  port: 31212
+spring:
+  datasource:
+
+    password: Kolbasa1289
+    url: jdbc:postgresql://localhost:5432/students
+    username: nikslav
+  main:
+    allow-bean-definition-overriding: true
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+access-token:
+  private: "access-refresh-token-keys/access-token-private.key"
+  public: "access-refresh-token-keys/access-token-public.key"
+refresh-token:
+  private: "access-refresh-token-keys/refresh-token-private.key"
+  public: "access-refresh-token-keys/refresh-token-public.key"
