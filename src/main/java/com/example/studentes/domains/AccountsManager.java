@@ -53,4 +53,6 @@ public class AccountsManager implements UserDetailsManager {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return accountsRepo.findAccountByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User wasn't found"));
     }
+
+
 }
