@@ -54,5 +54,12 @@ public class AccountsManager implements UserDetailsManager {
         return accountsRepo.findAccountByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User wasn't found"));
     }
 
+    public Account changeAccountPassword(String username, String password){
+        Account account = (Account) loadUserByUsername(username);
+        account.setPassword(passwordEncoder.encode(password));
+        updateUser(account);
+        return account;
+    }
+
 
 }

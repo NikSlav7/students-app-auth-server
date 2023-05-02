@@ -3,6 +3,7 @@ package com.example.studentes.web;
 
 import com.example.studentes.domains.Account;
 import com.example.studentes.domains.AccountsManager;
+import com.example.studentes.request.ChangePasswordRequest;
 import com.example.studentes.security.TokenGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -72,6 +73,12 @@ public class AuthController{
         Authentication authentication = jwtAuthenticationProvider.authenticate(new BearerTokenAuthenticationToken(renewTokenDTO.getRefreshToken()));
         if (!authentication.isAuthenticated()) throw new BadCredentialsException("The renew token is not valid");
         return ResponseEntity.ok(tokenGenerator.createTokens(authentication));
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity changePassword(@RequestBody ChangePasswordRequest changePasswordRequest){
+        accountsManager.changeAccountPassword(changePasswordRequest.getUsername(), changePasswordRequest.getNewPassword());
+        return ResponseEntity.ok(true);
     }
 
 

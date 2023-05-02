@@ -42,6 +42,8 @@ public class WebConfig {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final String RESOURCE_SERVER_DOMAIN = "http://localhost:21212";
+
     @Autowired
     public WebConfig(JwtConverter jwtConverter, UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
         this.jwtConverter = jwtConverter;
@@ -69,6 +71,7 @@ public class WebConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**").allowedOrigins("*").allowedMethods("*");
+                registry.addMapping("/").allowedOrigins(RESOURCE_SERVER_DOMAIN).allowedMethods("*");
             }
         };
     }
