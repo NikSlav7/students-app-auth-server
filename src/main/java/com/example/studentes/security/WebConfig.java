@@ -42,7 +42,10 @@ public class WebConfig {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final String RESOURCE_SERVER_DOMAIN = "http://localhost:21212";
+    private final String RESOURCE_SERVER_DOMAIN = "http://localhost:3000";
+
+    private final String FRONTEND_DOMAIN = "http://localhost:21212";
+
 
     @Autowired
     public WebConfig(JwtConverter jwtConverter, UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
@@ -70,8 +73,7 @@ public class WebConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("*").allowedMethods("*");
-                registry.addMapping("/").allowedOrigins(RESOURCE_SERVER_DOMAIN).allowedMethods("*");
+                registry.addMapping("/**").allowedOrigins(RESOURCE_SERVER_DOMAIN, FRONTEND_DOMAIN).allowedMethods("*");
             }
         };
     }

@@ -18,3 +18,7 @@ access-token:
 refresh-token:
   private: "access-refresh-token-keys/refresh-token-private.key"
   public: "access-refresh-token-keys/refresh-token-public.key"
+resource-server:
+  domain: localhost:21212
+frontend:
+  domain: http://localhost:3000

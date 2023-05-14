@@ -3,10 +3,17 @@ package com.example.studentes.web;
 
 import com.example.studentes.domains.Account;
 import com.example.studentes.domains.AccountsManager;
+import com.example.studentes.dto.RegistrationDTO;
+import com.example.studentes.dto.RenewTokenDTO;
+import com.example.studentes.dto.ValidatePasswordTokenDTO;
+import com.example.studentes.exception.ResourceServerError;
 import com.example.studentes.request.ChangePasswordRequest;
 import com.example.studentes.security.TokenGenerator;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,7 +24,13 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
+import java.util.Map;
 
 
 @Service
@@ -34,6 +47,10 @@ public class AuthController{
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
     private final JwtAuthenticationProvider jwtAccessAuthenticationProvider;
+
+
+    @Value("${resource-server.domain}")
+    private String resourceServerUrl;
 
     @Autowired
     public AuthController(AccountsManager accountsManager, TokenGenerator tokenGenerator,
@@ -76,9 +93,28 @@ public class AuthController{
     }
 
     @PostMapping("/change-password")
-    public ResponseEntity changePassword(@RequestBody ChangePasswordRequest changePasswordRequest){
+    public ResponseEntity changePassword(@RequestBody ChangePasswordRequest changePasswordRequest, HttpServletRequest request, @RequestHeader Map<String, String> headers) throws ResourceServerError, IOException {
+        validatePasswordToken(changePasswordRequest.getToken(), changePasswordRequest.getUsername());
         accountsManager.changeAccountPassword(changePasswordRequest.getUsername(), changePasswordRequest.getNewPassword());
         return ResponseEntity.ok(true);
+    }
+
+    private boolean  validatePasswordToken(String token, String username) throws IOException, ResourceServerError{
+        URL url = new URL("http://" + resourceServerUrl + "/api/password-reset/validate");
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("Content-Type","application/json");
+        connection.setDoOutput(true);
+        String data = new ObjectMapper().writeValueAsString(new ValidatePasswordTokenDTO(username, token));
+        try(OutputStream outputStream = connection.getOutputStream()){
+            byte[] sendData = data.getBytes(StandardCharsets.UTF_8);
+            outputStream.write(sendData, 0, sendData.length);
+        } catch (Exception exception){
+            exception.printStackTrace();
+        }
+        if (connection.getResponseCode() != 200) throw new ResourceServerError("Some error occured");
+        return true;
+
     }
 
 

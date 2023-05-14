@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class ApiExceptionHandler {
 
 
-    @ExceptionHandler(value = {UsernameNotFoundException.class})
+    @ExceptionHandler(value = {UsernameNotFoundException.class, ResourceServerError.class})
     public ResponseEntity handleException(Exception exception){
         return new ResponseEntity((Object) exception, HttpStatusCode.valueOf(400));
     }

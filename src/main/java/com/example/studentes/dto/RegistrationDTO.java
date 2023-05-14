@@ -1,4 +1,4 @@
-package com.example.studentes.web;
+package com.example.studentes.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

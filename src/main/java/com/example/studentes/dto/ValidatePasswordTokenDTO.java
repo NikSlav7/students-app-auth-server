@@ -1,4 +1,4 @@
-package com.example.studentes.request;
+package com.example.studentes.dto;
 
 
 import lombok.AllArgsConstructor;
@@ -10,6 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ChangePasswordRequest {
-    private String username, newPassword, token;
+public class ValidatePasswordTokenDTO {
+    String username, token;
 }
