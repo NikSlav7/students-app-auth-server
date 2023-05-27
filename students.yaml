@@ -1,0 +1,48 @@
+version: "3"
+services:
+     db:
+       image: postgres
+       restart: always
+       ports:
+         - 5432:5432
+       environment:
+          - POSTGRES_DB=students
+          - POSTGRES_USER=nikslav
+          - POSTGRES_PASSWORD=1234
+       volumes:
+         - pgdata:/var/lib/postgresql/data
+
+     auth-server:
+       depends_on:
+         - db
+       ports:
+         - 31212:31212
+       image: students-auth:6.2
+       restart: always
+
+
+
+     resource-server:
+        image: students-resource:3.2
+        restart: always
+        depends_on:
+          - db
+        ports:
+          - 21212:21212
+
+
+
+     front-end:
+        image: students-frontend:5.0
+        restart: always
+        depends_on:
+          - db
+          - resource-server
+          - auth-server
+        ports:
+          - 3000:3000
+
+volumes:
+  pgdata:
+
+

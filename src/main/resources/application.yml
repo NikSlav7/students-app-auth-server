@@ -3,15 +3,14 @@ server:
   port: 31212
 spring:
   datasource:
-
-    password: Kolbasa1289
-    url: jdbc:postgresql://localhost:5432/students
+    password: 1234
+    url: jdbc:postgresql://db:5432/students
     username: nikslav
   main:
     allow-bean-definition-overriding: true
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
 access-token:
   private: "access-refresh-token-keys/access-token-private.key"
   public: "access-refresh-token-keys/access-token-public.key"
@@ -19,6 +18,10 @@ refresh-token:
   private: "access-refresh-token-keys/refresh-token-private.key"
   public: "access-refresh-token-keys/refresh-token-public.key"
 resource-server:
-  domain: localhost:21212
+  domain: http://812.824.88.70:21212
 frontend:
+  domain: http://812.824.88.70:3000
+dev-resource-server:
+  domain: http://localhost:21212
+dev-frontend:
   domain: http://localhost:3000

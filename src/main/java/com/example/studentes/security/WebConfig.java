@@ -10,6 +10,7 @@ import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -42,10 +43,15 @@ public class WebConfig {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final String RESOURCE_SERVER_DOMAIN = "http://localhost:3000";
+    @Value("${resource-server.domain}")
+    private String RESOURCE_SERVER_DOMAIN;
+    @Value("${frontend.domain}")
+    private  String FRONTEND_DOMAIN;
 
-    private final String FRONTEND_DOMAIN = "http://localhost:21212";
-
+    @Value("${dev-resource-server.domain}")
+    private String DEV_RESOURCE_SERVER_DOMAIN;
+    @Value("${dev-frontend.domain}")
+    private  String DEV_FRONTEND_DOMAIN;
 
     @Autowired
     public WebConfig(JwtConverter jwtConverter, UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
@@ -73,10 +79,12 @@ public class WebConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins(RESOURCE_SERVER_DOMAIN, FRONTEND_DOMAIN).allowedMethods("*");
+                registry.addMapping("/**").allowedOrigins(
+                        FRONTEND_DOMAIN, DEV_FRONTEND_DOMAIN, "https://koolitrek.info").allowedMethods("*");
             }
         };
     }
+
 
     @Bean
     @Primary
