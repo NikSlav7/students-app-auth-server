@@ -100,7 +100,7 @@ public class AuthController{
     }
 
     private boolean  validatePasswordToken(String token, String username) throws IOException, ResourceServerError{
-        URL url = new URL("http://" + resourceServerUrl + "/api/password-reset/validate");
+        URL url = new URL(resourceServerUrl + "/api/password-reset/validate");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("POST");
         connection.setRequestProperty("Content-Type","application/json");

@@ -80,7 +80,7 @@ public class WebConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**").allowedOrigins(
-                        FRONTEND_DOMAIN, DEV_FRONTEND_DOMAIN, "https://koolitrek.info").allowedMethods("*");
+                        FRONTEND_DOMAIN, DEV_FRONTEND_DOMAIN, "https://koolitrek.info","http://koolitrek.info" ,"http://localhost:3000", "http://212.224.88.70").allowedMethods("*");
             }
         };
     }
